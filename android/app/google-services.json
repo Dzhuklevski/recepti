@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "690679299544",
+    "project_id": "recepti-93d6c",
+    "storage_bucket": "recepti-93d6c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690679299544:android:f90d2e20d23e10705a46ad",
+        "android_client_info": {
+          "package_name": "com.example.recepti"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBtx5JB8i7LWfPEjwX24VObsnixgInU0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

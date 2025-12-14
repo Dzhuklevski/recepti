@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/meal_summary.dart';
+import '../services/firebase_service.dart';
 
 class MealCard extends StatelessWidget {
   final MealSummary meal;
@@ -14,30 +15,61 @@ class MealCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final firebaseService = FirebaseService();
+
     return InkWell(
       onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Stack(
         children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: CachedNetworkImage(
-                imageUrl: meal.thumb,
-                fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) =>
-                    const Icon(Icons.broken_image),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: meal.thumb,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.broken_image),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 6),
+              Text(
+                meal.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
-          Text(
-            meal.name,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
+
+          /// FAVORITE BUTTON
+          Positioned(
+            top: 6,
+            right: 6,
+            child: StreamBuilder<bool>(
+              stream: firebaseService.isFavorite(meal.id),
+              builder: (context, snapshot) {
+                final isFav = snapshot.data ?? false;
+
+                return CircleAvatar(
+                  backgroundColor: Colors.black54,
+                  child: IconButton(
+                    icon: Icon(
+                      isFav ? Icons.favorite : Icons.favorite_border,
+                      color: isFav ? Colors.red : Colors.white,
+                    ),
+                    onPressed: () {
+                      firebaseService.toggleFavorite(meal);
+                    },
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
